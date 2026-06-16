@@ -1,26 +1,42 @@
 @import "tailwindcss";
+@import "@axiom-foundation/ui/tokens.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Tailwind v4 ignores node_modules by default, so the utility classes used
+   inside the shared @axiom-foundation/ui components (Nav, Footer) are never
+   generated. Register the package as a content source so the header/footer
+   render with their intended layout. */
+@source "../../node_modules/@axiom-foundation/ui/dist";
+
+* {
+  box-sizing: border-box;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  min-height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-ink);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+input[type="range"] {
+  min-height: 2rem;
+}
+
+input[type="number"] {
+  appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  margin: 0;
+  appearance: none;
 }
