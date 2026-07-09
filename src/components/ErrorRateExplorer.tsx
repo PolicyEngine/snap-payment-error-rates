@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   BANDS,
   bandFor,
@@ -15,18 +15,22 @@ import {
   type BandKey,
   type StateRecord,
 } from "@/lib/obbba";
+import { loadCostShareRuntime } from "@/lib/costShareAxiom";
 
+/* Sequential single-hue ramp from --chart-1 (PE teal): fractions chosen for
+ * monotonic lightness and the widest adjacent-step CVD separation the hue
+ * supports; segment gaps, borders, and labels carry the rest. */
 const RAMP: Record<BandKey, string> = {
-  lt6: "color-mix(in oklab, var(--color-accent) 14%, var(--color-paper))",
-  b6to8: "color-mix(in oklab, var(--color-accent) 34%, var(--color-paper))",
-  b8to10: "color-mix(in oklab, var(--color-accent) 60%, var(--color-paper))",
-  b10to13_33: "var(--color-accent)",
+  lt6: "color-mix(in oklab, var(--chart-1) 12%, var(--background))",
+  b6to8: "color-mix(in oklab, var(--chart-1) 42%, var(--background))",
+  b8to10: "color-mix(in oklab, var(--chart-1) 72%, var(--background))",
+  b10to13_33: "var(--chart-1)",
   gte13_33:
-    "repeating-linear-gradient(45deg, var(--color-ink-muted) 0 3px, var(--color-paper) 3px 6px)",
+    "repeating-linear-gradient(45deg, var(--muted-foreground) 0 3px, var(--background) 3px 6px)",
 };
 const RAMP_SOLID: Record<BandKey, string> = {
   ...RAMP,
-  gte13_33: "var(--color-ink-muted)",
+  gte13_33: "var(--muted-foreground)",
 };
 
 const YEARS = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025];
@@ -77,10 +81,11 @@ export function ErrorRateExplorer() {
         setSortKey={setSortKey}
       />
       <BandLegend />
-      <div className="overflow-x-auto rounded-[6px] border border-[var(--color-rule)] bg-[var(--color-paper-elevated)]">
+      <EngineVerification />
+      <div className="overflow-x-auto rounded-[6px] border border-[var(--border)] bg-[var(--card)]">
         <table className="w-full min-w-[980px] border-collapse text-sm">
           <thead>
-            <tr className="border-b border-[var(--color-rule)] text-left font-mono text-[0.66rem] uppercase tracking-[0.16em] text-[var(--color-ink-muted)]">
+            <tr className="border-b border-[var(--border)] text-left font-mono text-[0.66rem] uppercase tracking-[0.16em] text-[var(--muted-foreground)]">
               <Th>State agency</Th>
               <Th>
                 FY25 rate
@@ -109,7 +114,7 @@ export function ErrorRateExplorer() {
           </tbody>
         </table>
       </div>
-      <p className="text-sm leading-6 text-[var(--color-ink-muted)]">
+      <p className="text-sm leading-6 text-[var(--muted-foreground)]">
         Dollar figures apply the statutory share to FY2025 federal benefit
         issuance ({money(DATA.national.issuanceFY2025)} nationally) as a scale
         proxy for FY2028; actual FY2028 issuance will differ. States may elect
@@ -133,14 +138,14 @@ function Controls({
   setSortKey: (k: SortKey) => void;
 }) {
   return (
-    <div className="grid gap-5 rounded-[6px] border border-[var(--color-rule)] bg-[var(--color-paper-elevated)] p-5 md:grid-cols-[minmax(0,1fr)_240px]">
+    <div className="grid gap-5 rounded-[6px] border border-[var(--border)] bg-[var(--card)] p-5 md:grid-cols-[minmax(0,1fr)_240px]">
       <div>
         <label
           htmlFor="sample-k"
-          className="mb-1 flex items-baseline justify-between gap-3 text-sm font-semibold text-[var(--color-ink)]"
+          className="mb-1 flex items-baseline justify-between gap-3 text-sm font-semibold text-[var(--foreground)]"
         >
           What if QC samples were bigger?
-          <span className="font-mono text-[0.72rem] font-normal uppercase tracking-[0.14em] text-[var(--color-ink-muted)]">
+          <span className="font-mono text-[0.72rem] font-normal uppercase tracking-[0.14em] text-[var(--muted-foreground)]">
             {sampleK.toFixed(2).replace(/\.?0+$/, "")}× current sample
           </span>
         </label>
@@ -152,9 +157,9 @@ function Controls({
           step={0.25}
           value={sampleK}
           onChange={(e) => setSampleK(Number(e.currentTarget.value))}
-          className="w-full accent-[var(--color-accent)]"
+          className="w-full accent-[var(--primary)]"
         />
-        <p className="mt-1 text-sm leading-5 text-[var(--color-ink-secondary)]">
+        <p className="mt-1 text-sm leading-5 text-[var(--color-gray-600)]">
           States review ~300–1,000 cases a year; sampling error shrinks with
           √n. Drag to see how larger reviews would firm up band assignments —
           probabilities and noise-weighted costs update live.
@@ -163,7 +168,7 @@ function Controls({
       <div>
         <label
           htmlFor="sort-key"
-          className="mb-1 block text-sm font-semibold text-[var(--color-ink)]"
+          className="mb-1 block text-sm font-semibold text-[var(--foreground)]"
         >
           Sort by
         </label>
@@ -171,7 +176,7 @@ function Controls({
           id="sort-key"
           value={sortKey}
           onChange={(e) => setSortKey(e.currentTarget.value as SortKey)}
-          className="h-10 w-full rounded-[4px] border border-[var(--color-rule-strong)] bg-[var(--color-paper)] px-2 font-mono text-sm text-[var(--color-ink)]"
+          className="h-10 w-full rounded-[4px] border border-[var(--color-gray-400)] bg-[var(--background)] px-2 font-mono text-sm text-[var(--foreground)]"
         >
           <option value="expected">Noise-weighted FY2028 cost</option>
           <option value="point">FY2028 cost at published rate</option>
@@ -184,16 +189,88 @@ function Controls({
   );
 }
 
+type EngineState =
+  | { kind: "loading" }
+  | { kind: "verified"; engineVersion: string }
+  | { kind: "mismatch"; states: string[] }
+  | { kind: "unavailable" };
+
+/** Recompute every state's statutory share and delay determination from the
+ * RuleSpec encoding of 7 U.S.C. 2013(a)(2), in this browser, and check them
+ * against the published assignments shown in the table. */
+function EngineVerification() {
+  const [state, setState] = useState<EngineState>({ kind: "loading" });
+
+  useEffect(() => {
+    let cancelled = false;
+    loadCostShareRuntime()
+      .then((runtime) => {
+        if (cancelled) return;
+        const mismatched = DATA.states
+          .filter((s) => {
+            const result = runtime.run(s.fy2025.per, s.issuanceFY2025);
+            return (
+              Math.abs(result.shareRate - s.share) > 1e-9 ||
+              result.delayed !== s.delayedFY2028
+            );
+          })
+          .map((s) => s.abbrev);
+        setState(
+          mismatched.length
+            ? { kind: "mismatch", states: mismatched }
+            : { kind: "verified", engineVersion: runtime.engineVersion },
+        );
+      })
+      .catch(() => {
+        if (!cancelled) setState({ kind: "unavailable" });
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (state.kind === "unavailable") return null;
+
+  return (
+    <p
+      className={`font-mono text-xs leading-5 ${
+        state.kind === "mismatch"
+          ? "text-[var(--text-error)]"
+          : "text-[var(--muted-foreground)]"
+      }`}
+      aria-live="polite"
+    >
+      {state.kind === "loading" &&
+        "Recomputing statutory assignments from the RuleSpec encoding of 7 U.S.C. 2013(a)(2) in your browser…"}
+      {state.kind === "verified" && (
+        <>
+          ✓ All 53 band and delay assignments recomputed in this browser by the
+          Axiom rules engine v{state.engineVersion} from the{" "}
+          <a
+            href="https://github.com/PolicyEngine/snap-payment-error-rates/blob/main/public/rulespec/us/statutes/7/2013/a/2.yaml"
+            className="underline decoration-[var(--color-gray-400)] underline-offset-2 hover:text-[var(--primary)]"
+          >
+            RuleSpec encoding
+          </a>{" "}
+          of 7 U.S.C. 2013(a)(2) — no calculation API called.
+        </>
+      )}
+      {state.kind === "mismatch" &&
+        `Engine disagreement for: ${state.states.join(", ")} — treat table assignments as unverified.`}
+    </p>
+  );
+}
+
 function BandLegend() {
   return (
-    <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-[var(--color-ink-secondary)]">
-      <span className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-[var(--color-ink-muted)]">
+    <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-[var(--color-gray-600)]">
+      <span className="font-mono text-[0.66rem] uppercase tracking-[0.16em] text-[var(--muted-foreground)]">
         State share of benefits
       </span>
       {BANDS.map((b) => (
         <span key={b.key} className="inline-flex items-center gap-1.5">
           <span
-            className="inline-block h-3 w-3 rounded-[2px] border border-[var(--color-rule)]"
+            className="inline-block h-3 w-3 rounded-[2px] border border-[var(--border)]"
             style={{ background: RAMP[b.key] }}
           />
           {b.label} → {b.delayed ? "delayed" : pct(b.share)}
@@ -233,25 +310,25 @@ function StateRows({
   return (
     <>
       <tr
-        className={`cursor-pointer border-b border-[var(--color-rule-subtle)] transition-colors hover:bg-[var(--color-accent-light)] ${
-          expanded ? "bg-[var(--color-accent-light)]" : ""
+        className={`cursor-pointer border-b border-[var(--color-gray-100)] transition-colors hover:bg-[var(--color-teal-50)] ${
+          expanded ? "bg-[var(--color-teal-50)]" : ""
         }`}
         onClick={onToggle}
         aria-expanded={expanded}
       >
-        <td className="px-3 py-2.5 font-semibold text-[var(--color-ink)]">
+        <td className="px-3 py-2.5 font-semibold text-[var(--foreground)]">
           {s.name}
           {s.delayedFY2028 && (
-            <span className="ml-2 rounded-full border border-[var(--color-rule-strong)] px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-[0.12em] text-[var(--color-ink-muted)]">
+            <span className="ml-2 rounded-full border border-[var(--color-gray-400)] px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-[0.12em] text-[var(--muted-foreground)]">
               delayed
             </span>
           )}
         </td>
         <td className="px-3 py-2.5">
-          <span className="font-mono text-[var(--color-ink)]">
+          <span className="font-mono text-[var(--foreground)]">
             {s.fy2025.per.toFixed(2)}%
           </span>
-          <span className="block font-mono text-xs text-[var(--color-ink-muted)]">
+          <span className="block font-mono text-xs text-[var(--muted-foreground)]">
             {ci[0].toFixed(1)}–{ci[1].toFixed(1)}
           </span>
         </td>
@@ -259,9 +336,9 @@ function StateRows({
           <Sparkline series={s.series} />
         </td>
         <td className="px-3 py-2.5">
-          <span className="inline-flex items-center gap-1.5 whitespace-nowrap font-mono text-xs text-[var(--color-ink-secondary)]">
+          <span className="inline-flex items-center gap-1.5 whitespace-nowrap font-mono text-xs text-[var(--color-gray-600)]">
             <span
-              className="inline-block h-3 w-3 rounded-[2px] border border-[var(--color-rule)]"
+              className="inline-block h-3 w-3 rounded-[2px] border border-[var(--border)]"
               style={{ background: RAMP[band.key] }}
             />
             {band.label}
@@ -270,20 +347,20 @@ function StateRows({
         <td className="px-3 py-2.5">
           <StackedBar probs={probs} />
         </td>
-        <td className="px-3 py-2.5 text-right font-mono text-[var(--color-ink)]">
+        <td className="px-3 py-2.5 text-right font-mono text-[var(--foreground)]">
           {money(point)}
         </td>
-        <td className="px-3 py-2.5 text-right font-mono text-[var(--color-ink)]">
+        <td className="px-3 py-2.5 text-right font-mono text-[var(--foreground)]">
           {money(expected)}
         </td>
         <td className="px-3 py-2.5 text-right font-mono">
           <span
             className={
               flip >= 0.3
-                ? "text-[var(--color-error)]"
+                ? "text-[var(--text-error)]"
                 : flip >= 0.15
-                  ? "text-[var(--color-accent)]"
-                  : "text-[var(--color-ink-secondary)]"
+                  ? "text-[var(--primary)]"
+                  : "text-[var(--color-gray-600)]"
             }
           >
             {pct(flip)}
@@ -291,8 +368,8 @@ function StateRows({
         </td>
       </tr>
       {expanded && (
-        <tr className="border-b border-[var(--color-rule)]">
-          <td colSpan={8} className="bg-[var(--color-paper)] px-3 py-4 md:px-5">
+        <tr className="border-b border-[var(--border)]">
+          <td colSpan={8} className="bg-[var(--background)] px-3 py-4 md:px-5">
             <Detail row={row} se={se} sampleK={sampleK} />
           </td>
         </tr>
@@ -333,12 +410,12 @@ function Sparkline({ series }: { series: Record<string, number | null> }) {
           key={i}
           d={d}
           fill="none"
-          stroke="var(--color-accent)"
+          stroke="var(--chart-1)"
           strokeWidth={1.75}
           strokeLinecap="round"
         />
       ))}
-      {last !== null && <circle cx={x(YEARS.length - 1)} cy={y(last)} r={2.5} fill="var(--color-accent-hover)" />}
+      {last !== null && <circle cx={x(YEARS.length - 1)} cy={y(last)} r={2.5} fill="var(--color-teal-700)" />}
     </svg>
   );
 }
@@ -346,7 +423,7 @@ function Sparkline({ series }: { series: Record<string, number | null> }) {
 function StackedBar({ probs }: { probs: Record<BandKey, number> }) {
   return (
     <div
-      className="flex h-4 w-full min-w-[160px] overflow-hidden rounded-[3px] border border-[var(--color-rule)]"
+      className="flex h-4 w-full min-w-[160px] overflow-hidden rounded-[3px] border border-[var(--border)]"
       role="img"
       aria-label={BANDS.map((b) => `${b.label}: ${pct(probs[b.key])}`).join(", ")}
     >
@@ -354,7 +431,7 @@ function StackedBar({ probs }: { probs: Record<BandKey, number> }) {
         <span
           key={b.key}
           title={`${b.label} (${b.delayed ? "delayed" : `${pct(b.share)} share`}): ${pct(probs[b.key])} chance`}
-          className="h-full border-r border-[var(--color-paper-elevated)] last:border-r-0"
+          className="h-full border-r border-[var(--card)] last:border-r-0"
           style={{ width: `${probs[b.key] * 100}%`, background: RAMP[b.key] }}
         />
       ))}
@@ -369,11 +446,11 @@ function Detail({ row, se, sampleK }: { row: Row; se: number; sampleK: number })
   return (
     <div className="grid gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
       <div>
-        <p className="mb-2 font-mono text-[0.66rem] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
+        <p className="mb-2 font-mono text-[0.66rem] uppercase tracking-[0.18em] text-[var(--muted-foreground)]">
           Sampling distribution at {sampleK}× sample — {s.name}
         </p>
         <DensityChart per={per} se={se} xMax={detailXMax(s)} />
-        <p className="mt-2 text-sm leading-6 text-[var(--color-ink-secondary)]">
+        <p className="mt-2 text-sm leading-6 text-[var(--color-gray-600)]">
           Measured rate {per.toFixed(2)}% from a review of {s.qc.n.toLocaleString()}{" "}
           cases (FY2024 sample; SE ≈ {se.toFixed(2)}ppt
           {sampleK !== 1 ? ` at ${sampleK}× the sample` : ""}).{" "}
@@ -387,12 +464,12 @@ function Detail({ row, se, sampleK }: { row: Row; se: number; sampleK: number })
         </p>
       </div>
       <div>
-        <p className="mb-2 font-mono text-[0.66rem] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
+        <p className="mb-2 font-mono text-[0.66rem] uppercase tracking-[0.18em] text-[var(--muted-foreground)]">
           FY2028 outcome by band — FY2025 issuance {money(s.issuanceFY2025)}
         </p>
         <table className="w-full border-collapse text-sm">
           <thead>
-            <tr className="border-b border-[var(--color-rule)] text-left font-mono text-[0.62rem] uppercase tracking-[0.14em] text-[var(--color-ink-muted)]">
+            <tr className="border-b border-[var(--border)] text-left font-mono text-[0.62rem] uppercase tracking-[0.14em] text-[var(--muted-foreground)]">
               <th className="py-1.5 pr-2">Band</th>
               <th className="py-1.5 pr-2">Share</th>
               <th className="py-1.5 pr-2 text-right">Chance</th>
@@ -406,29 +483,29 @@ function Detail({ row, se, sampleK }: { row: Row; se: number; sampleK: number })
               return (
                 <tr
                   key={b.key}
-                  className={`border-b border-[var(--color-rule-subtle)] ${
-                    current ? "bg-[var(--color-accent-light)]" : ""
+                  className={`border-b border-[var(--color-gray-100)] ${
+                    current ? "bg-[var(--color-teal-50)]" : ""
                   }`}
                 >
                   <td className="py-1.5 pr-2">
-                    <span className="inline-flex items-center gap-1.5 font-mono text-xs text-[var(--color-ink)]">
+                    <span className="inline-flex items-center gap-1.5 font-mono text-xs text-[var(--foreground)]">
                       <span
-                        className="inline-block h-3 w-3 rounded-[2px] border border-[var(--color-rule)]"
+                        className="inline-block h-3 w-3 rounded-[2px] border border-[var(--border)]"
                         style={{ background: RAMP[b.key] }}
                       />
                       {b.label}
                       {current ? " ← measured" : ""}
                     </span>
                   </td>
-                  <td className="py-1.5 pr-2 font-mono text-xs text-[var(--color-ink-secondary)]">
+                  <td className="py-1.5 pr-2 font-mono text-xs text-[var(--color-gray-600)]">
                     {b.delayed ? "delayed" : pct(b.share)}
                   </td>
-                  <td className="py-1.5 pr-2 text-right font-mono text-[var(--color-ink)]">
+                  <td className="py-1.5 pr-2 text-right font-mono text-[var(--foreground)]">
                     {probs[b.key] < 0.005 && probs[b.key] > 0
                       ? "<1%"
                       : pct(probs[b.key])}
                   </td>
-                  <td className="py-1.5 text-right font-mono text-[var(--color-ink)]">
+                  <td className="py-1.5 text-right font-mono text-[var(--foreground)]">
                     {b.delayed ? "$0 in FY28" : money(cost)}
                   </td>
                 </tr>
@@ -436,9 +513,9 @@ function Detail({ row, se, sampleK }: { row: Row; se: number; sampleK: number })
             })}
           </tbody>
         </table>
-        <p className="mt-3 text-sm leading-6 text-[var(--color-ink-secondary)]">
+        <p className="mt-3 text-sm leading-6 text-[var(--color-gray-600)]">
           Noise-weighted FY2028 cost:{" "}
-          <span className="font-mono font-semibold text-[var(--color-ink)]">
+          <span className="font-mono font-semibold text-[var(--foreground)]">
             {money(row.expected)}
           </span>{" "}
           vs {money(row.point)} at the published rate.
@@ -489,7 +566,7 @@ function DensityChart({
         viewBox={`0 0 ${width} ${height}`}
         role="img"
         aria-label={`Sampling distribution of the measured payment error rate around ${per.toFixed(2)}%`}
-        className="h-[170px] w-full min-w-[420px] rounded-[4px] border border-[var(--color-rule)] bg-[var(--color-paper-elevated)]"
+        className="h-[170px] w-full min-w-[420px] rounded-[4px] border border-[var(--border)] bg-[var(--card)]"
       >
         <defs>
           <pattern
@@ -499,8 +576,8 @@ function DensityChart({
             patternTransform="rotate(45)"
             patternUnits="userSpaceOnUse"
           >
-            <rect width="6" height="6" fill="var(--color-paper-elevated)" />
-            <rect width="2.5" height="6" fill="var(--color-ink-muted)" opacity="0.45" />
+            <rect width="6" height="6" fill="var(--card)" />
+            <rect width="2.5" height="6" fill="var(--muted-foreground)" opacity="0.45" />
           </pattern>
         </defs>
         {BANDS.map((b) => {
@@ -525,7 +602,7 @@ function DensityChart({
         <path
           d={curve}
           fill="none"
-          stroke="var(--color-ink)"
+          stroke="var(--foreground)"
           strokeWidth={2}
           strokeLinejoin="round"
         />
@@ -534,16 +611,16 @@ function DensityChart({
           x2={x(per)}
           y1={pad.top}
           y2={baseline}
-          stroke="var(--color-accent-hover)"
+          stroke="var(--color-teal-700)"
           strokeWidth={2}
         />
-        <circle cx={x(per)} cy={y(yMaxPdf)} r={4} fill="var(--color-accent-hover)" />
+        <circle cx={x(per)} cy={y(yMaxPdf)} r={4} fill="var(--color-teal-700)" />
         <line
           x1={pad.left}
           x2={width - pad.right}
           y1={baseline}
           y2={baseline}
-          stroke="var(--color-rule-strong)"
+          stroke="var(--color-gray-400)"
         />
         {ticks.map((t) => (
           <g key={t}>
@@ -552,13 +629,13 @@ function DensityChart({
               x2={x(t)}
               y1={baseline}
               y2={baseline + 4}
-              stroke="var(--color-rule-strong)"
+              stroke="var(--color-gray-400)"
             />
             <text
               x={x(t)}
               y={baseline + 16}
               textAnchor="middle"
-              className="fill-[var(--color-ink-muted)] font-mono text-[10px]"
+              className="fill-[var(--muted-foreground)] font-mono text-[10px]"
             >
               {t === DELAY_THRESHOLD ? "13.33" : t}%
             </text>

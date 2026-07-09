@@ -1,10 +1,17 @@
-# SNAP payment error rates and the OBBBA state cost share
+# SNAP payment error rates and the state cost share
 
-Interactive explorer of FY2025 SNAP payment error rates for all 53 state
-agencies, the 0–15% state cost share they trigger under OBBBA §10105
+PolicyEngine's interactive explorer of FY2025 SNAP payment error rates for all
+53 state agencies, the 0–15% state cost share they trigger under OBBBA §10105
 (7 U.S.C. 2013(a)(2)) beginning FY2028, and — the point of the tool — how much
 of each state's band assignment is statistical noise from the quality-control
 sample. Live at [snap-per-penalty-tool.vercel.app](https://snap-per-penalty-tool.vercel.app).
+
+The statutory cost-share tiers are not hand-coded: they are encoded in
+[RuleSpec](public/rulespec/us/statutes/7/2013/a/2.yaml) and executed in the
+browser by the [Axiom Foundation](https://axiom-foundation.org)'s open-source
+rules engine, which re-derives every state's band and delay assignment from
+the encoded law (the test suite cross-checks the compiled statute against a
+dense rate sweep and all 53 published assignments).
 
 For each state agency it shows:
 

@@ -112,18 +112,18 @@ export function SnapPerCalculator() {
   return (
     <section className="min-h-screen px-5 pb-12 pt-28 md:px-8 md:pt-32">
       <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-8">
-        <div className="grid gap-8 border-b border-[var(--color-rule)] pb-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.35fr)] lg:items-end">
+        <div className="grid gap-8 border-b border-[var(--border)] pb-8 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.35fr)] lg:items-end">
           <div>
-            <p className="mb-3 font-mono text-[0.7rem] uppercase tracking-[0.24em] text-[var(--color-ink-muted)]">
+            <p className="mb-3 font-mono text-[0.7rem] uppercase tracking-[0.24em] text-[var(--muted-foreground)]">
               SNAP quality control
             </p>
-            <h1 className="max-w-[760px] text-4xl font-semibold leading-[1.05] tracking-[-0.03em] text-[var(--color-ink)] md:text-6xl">
+            <h1 className="max-w-[760px] text-4xl font-semibold leading-[1.05] tracking-[-0.03em] text-[var(--foreground)] md:text-6xl">
               Payment error rate liability calculator
             </h1>
           </div>
-          <p className="max-w-[660px] text-base leading-7 text-[var(--color-ink-secondary)] md:text-lg">
+          <p className="max-w-[660px] text-base leading-7 text-[var(--color-gray-600)] md:text-lg">
             A state agency fiscal-year tool for{" "}
-            <code className="rounded bg-[var(--color-rule-subtle)] px-1.5 py-0.5 font-mono text-[0.85em] text-[var(--color-ink)]">
+            <code className="rounded bg-[var(--color-gray-100)] px-1.5 py-0.5 font-mono text-[0.85em] text-[var(--foreground)]">
               7 CFR 275.23(d)(2)
             </code>
             . Inputs are sent to Axiom&apos;s compiled RuleSpec in the browser; the
@@ -133,7 +133,7 @@ export function SnapPerCalculator() {
 
         <div className="grid min-w-0 gap-6 lg:grid-cols-[390px_minmax(0,1fr)]">
           <form
-            className="rounded-[6px] border border-[var(--color-rule)] bg-[var(--color-paper-elevated)] p-5 shadow-[0_18px_48px_rgba(28,25,23,0.06)]"
+            className="rounded-[6px] border border-[var(--border)] bg-[var(--card)] p-5 shadow-[0_18px_48px_rgba(16,24,40,0.06)]"
             aria-label="SNAP payment error rate liability inputs"
           >
             <InputPair
@@ -181,13 +181,13 @@ export function SnapPerCalculator() {
                 }))
               }
             />
-            <div className="border-t border-[var(--color-rule-subtle)] py-4">
+            <div className="border-t border-[var(--color-gray-100)] py-4">
               <label
                 htmlFor="allotments-millions"
-                className="mb-2 flex items-baseline justify-between gap-3 text-sm font-semibold text-[var(--color-ink)]"
+                className="mb-2 flex items-baseline justify-between gap-3 text-sm font-semibold text-[var(--foreground)]"
               >
                 Value of all allotments issued
-                <span className="font-mono text-[0.72rem] font-normal uppercase tracking-[0.14em] text-[var(--color-ink-muted)]">
+                <span className="font-mono text-[0.72rem] font-normal uppercase tracking-[0.14em] text-[var(--muted-foreground)]">
                   annual USD, millions
                 </span>
               </label>
@@ -220,15 +220,15 @@ export function SnapPerCalculator() {
                     allotments: clamp(parsed, 0, MAX_ALLOTMENTS_MILLIONS) * MILLION,
                   }));
                 }}
-                className="h-11 w-full rounded-[4px] border border-[var(--color-rule-strong)] bg-[var(--color-paper)] px-3 font-mono text-sm text-[var(--color-ink)] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus-ring)]"
+                className="h-11 w-full rounded-[4px] border border-[var(--color-gray-400)] bg-[var(--background)] px-3 font-mono text-sm text-[var(--foreground)] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)]"
               />
-              <p className="mt-2 text-sm text-[var(--color-ink-muted)]">
+              <p className="mt-2 text-sm text-[var(--muted-foreground)]">
                 Current example: ${number.format(inputs.allotments / MILLION)}M
                 {" "}({money.format(inputs.allotments)} total) issued in the fiscal year.
               </p>
             </div>
-            <div className="border-t border-[var(--color-rule-subtle)] pt-4">
-              <label className="grid cursor-pointer grid-cols-[20px_minmax(0,1fr)] gap-3 text-sm font-semibold text-[var(--color-ink)]">
+            <div className="border-t border-[var(--color-gray-100)] pt-4">
+              <label className="grid cursor-pointer grid-cols-[20px_minmax(0,1fr)] gap-3 text-sm font-semibold text-[var(--foreground)]">
                 <input
                   type="checkbox"
                   checked={inputs.consecutiveFiscalYear}
@@ -238,7 +238,7 @@ export function SnapPerCalculator() {
                       consecutiveFiscalYear: event.currentTarget.checked,
                     }))
                   }
-                  className="mt-0.5 h-5 w-5 accent-[var(--color-accent)]"
+                  className="mt-0.5 h-5 w-5 accent-[var(--primary)]"
                 />
                 <span>Second or subsequent consecutive fiscal year</span>
               </label>
@@ -247,7 +247,7 @@ export function SnapPerCalculator() {
 
           <div className="grid min-w-0 gap-6">
             {state.kind === "error" ? (
-              <div className="rounded-[6px] border border-[var(--color-error)] bg-[var(--color-paper-elevated)] p-5 text-[var(--color-error)]">
+              <div className="rounded-[6px] border border-[var(--text-error)] bg-[var(--card)] p-5 text-[var(--text-error)]">
                 {state.message}
               </div>
             ) : (
@@ -315,12 +315,12 @@ export function SnapPerCalculator() {
                   />
                 </div>
 
-                <section className="min-w-0 rounded-[6px] border border-[var(--color-rule)] bg-[var(--color-paper-elevated)] p-5 shadow-[0_18px_48px_rgba(28,25,23,0.06)]">
+                <section className="min-w-0 rounded-[6px] border border-[var(--border)] bg-[var(--card)] p-5 shadow-[0_18px_48px_rgba(16,24,40,0.06)]">
                   <div className="mb-4 flex flex-col gap-1 md:flex-row md:items-baseline md:justify-between">
-                    <h2 className="text-lg font-semibold tracking-[-0.01em] text-[var(--color-ink)]">
+                    <h2 className="text-lg font-semibold tracking-[-0.01em] text-[var(--foreground)]">
                       Liability by payment error rate
                     </h2>
-                    <p className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--color-ink-muted)]">
+                    <p className="font-mono text-xs uppercase tracking-[0.16em] text-[var(--muted-foreground)]">
                       {result ? `Current PER ${percent.format(result.paymentErrorRate)}` : "Axiom loading"}
                     </p>
                   </div>
@@ -378,13 +378,13 @@ function InputPair({
   onChange: (value: number) => void;
 }) {
   return (
-    <div className="border-t border-[var(--color-rule-subtle)] py-4 first:border-t-0 first:pt-0">
+    <div className="border-t border-[var(--color-gray-100)] py-4 first:border-t-0 first:pt-0">
       <label
         htmlFor={id}
-        className="mb-2 flex items-baseline justify-between gap-3 text-sm font-semibold text-[var(--color-ink)]"
+        className="mb-2 flex items-baseline justify-between gap-3 text-sm font-semibold text-[var(--foreground)]"
       >
         {label}
-        <span className="font-mono text-[0.72rem] font-normal uppercase tracking-[0.14em] text-[var(--color-ink-muted)]">
+        <span className="font-mono text-[0.72rem] font-normal uppercase tracking-[0.14em] text-[var(--muted-foreground)]">
           {value.toFixed(2)}
           {suffix}
         </span>
@@ -398,7 +398,7 @@ function InputPair({
           step={step}
           value={value}
           onChange={(event) => onChange(readNumber(event.currentTarget.value, value))}
-          className="w-full accent-[var(--color-accent)]"
+          className="w-full accent-[var(--primary)]"
           aria-label={`${label} slider`}
         />
         <input
@@ -409,7 +409,7 @@ function InputPair({
           step={step}
           value={value}
           onChange={(event) => onChange(readNumber(event.currentTarget.value, value))}
-          className="h-10 w-full rounded-[4px] border border-[var(--color-rule-strong)] bg-[var(--color-paper)] px-3 font-mono text-sm text-[var(--color-ink)] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus-ring)]"
+          className="h-10 w-full rounded-[4px] border border-[var(--color-gray-400)] bg-[var(--background)] px-3 font-mono text-sm text-[var(--foreground)] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ring)]"
         />
       </div>
     </div>
@@ -426,14 +426,14 @@ function Metric({
   detail: string;
 }) {
   return (
-    <article className="min-h-[132px] rounded-[6px] border border-[var(--color-rule)] bg-[var(--color-paper-elevated)] p-5 shadow-[0_18px_48px_rgba(28,25,23,0.06)]">
-      <p className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
+    <article className="min-h-[132px] rounded-[6px] border border-[var(--border)] bg-[var(--card)] p-5 shadow-[0_18px_48px_rgba(16,24,40,0.06)]">
+      <p className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-[var(--muted-foreground)]">
         {label}
       </p>
-      <p className="mt-4 break-words text-3xl font-semibold leading-none tracking-[-0.02em] text-[var(--color-ink)]">
+      <p className="mt-4 break-words text-3xl font-semibold leading-none tracking-[-0.02em] text-[var(--foreground)]">
         {value}
       </p>
-      <p className="mt-3 text-sm leading-5 text-[var(--color-ink-secondary)]">{detail}</p>
+      <p className="mt-3 text-sm leading-5 text-[var(--color-gray-600)]">{detail}</p>
     </article>
   );
 }
@@ -450,20 +450,20 @@ function Check({
   detail: string;
 }) {
   const tone = loading
-    ? "border-[var(--color-rule)] text-[var(--color-ink-muted)]"
+    ? "border-[var(--border)] text-[var(--muted-foreground)]"
     : passed
-      ? "border-[var(--color-success)] text-[var(--color-success)]"
-      : "border-[var(--color-error)] text-[var(--color-error)]";
+      ? "border-[var(--text-success)] text-[var(--text-success)]"
+      : "border-[var(--text-error)] text-[var(--text-error)]";
 
   return (
-    <article className="rounded-[6px] border border-[var(--color-rule)] bg-[var(--color-paper-elevated)] p-4">
+    <article className="rounded-[6px] border border-[var(--border)] bg-[var(--card)] p-4">
       <div
         className={`inline-flex h-7 min-w-20 items-center justify-center rounded-full border px-3 font-mono text-xs uppercase tracking-[0.12em] ${tone}`}
       >
         {loading ? "Run" : passed ? "Holds" : "Fails"}
       </div>
-      <h3 className="mt-3 text-base font-semibold text-[var(--color-ink)]">{label}</h3>
-      <p className="mt-1 text-sm leading-5 text-[var(--color-ink-secondary)]">{detail}</p>
+      <h3 className="mt-3 text-base font-semibold text-[var(--foreground)]">{label}</h3>
+      <p className="mt-1 text-sm leading-5 text-[var(--color-gray-600)]">{detail}</p>
     </article>
   );
 }
@@ -512,7 +512,7 @@ function LiabilityChart({
         viewBox={`0 0 ${chart.width} ${chart.height}`}
         role="img"
         aria-label="Line chart of Axiom-computed liability by payment error rate"
-        className="h-[320px] min-w-[720px] rounded-[4px] border border-[var(--color-rule)] bg-[var(--color-paper)]"
+        className="h-[320px] min-w-[720px] rounded-[4px] border border-[var(--border)] bg-[var(--background)]"
       >
         {grid.map((share) => {
           const amount = chart.yMax * share;
@@ -524,9 +524,9 @@ function LiabilityChart({
                 x2={chart.width - chart.pad.right}
                 y1={y}
                 y2={y}
-                stroke="var(--color-rule)"
+                stroke="var(--border)"
               />
-              <text x={12} y={y + 4} className="fill-[var(--color-ink-muted)] font-mono text-[12px]">
+              <text x={12} y={y + 4} className="fill-[var(--muted-foreground)] font-mono text-[12px]">
                 {compactMoney(amount)}
               </text>
             </g>
@@ -542,12 +542,12 @@ function LiabilityChart({
                 x2={x}
                 y1={chart.height - chart.pad.bottom}
                 y2={chart.height - chart.pad.bottom + 6}
-                stroke="var(--color-rule-strong)"
+                stroke="var(--color-gray-400)"
               />
               <text
                 x={x - 16}
                 y={chart.height - 14}
-                className="fill-[var(--color-ink-muted)] font-mono text-[12px]"
+                className="fill-[var(--muted-foreground)] font-mono text-[12px]"
               >
                 {perPercent.toFixed(1)}%
               </text>
@@ -561,13 +561,13 @@ function LiabilityChart({
               x2={thresholdX}
               y1={chart.pad.top}
               y2={chart.height - chart.pad.bottom}
-              stroke="var(--color-warning)"
+              stroke="var(--text-warning)"
               strokeDasharray="6 5"
             />
             <text
               x={Math.min(thresholdX + 8, chart.width - 108)}
               y={chart.pad.top + 16}
-              className="fill-[var(--color-warning)] font-mono text-[12px]"
+              className="fill-[var(--text-warning)] font-mono text-[12px]"
             >
               105% NPM
             </text>
@@ -580,13 +580,13 @@ function LiabilityChart({
               x2={baselineX}
               y1={chart.pad.top}
               y2={chart.height - chart.pad.bottom}
-              stroke="var(--color-rule-strong)"
+              stroke="var(--color-gray-400)"
               strokeDasharray="3 5"
             />
             <text
               x={Math.min(baselineX + 8, chart.width - 118)}
               y={chart.height - chart.pad.bottom - 10}
-              className="fill-[var(--color-ink-muted)] font-mono text-[12px]"
+              className="fill-[var(--muted-foreground)] font-mono text-[12px]"
             >
               6% baseline
             </text>
@@ -596,7 +596,7 @@ function LiabilityChart({
           <path
             d={chart.path}
             fill="none"
-            stroke="var(--color-accent)"
+            stroke="var(--chart-1)"
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={3}
@@ -607,7 +607,7 @@ function LiabilityChart({
             cx={currentX}
             cy={currentY}
             r={5.5}
-            className="fill-[var(--color-accent-hover)]"
+            className="fill-[var(--color-teal-700)]"
           />
         )}
       </svg>
@@ -619,14 +619,14 @@ function RuntimeFootnote({ state }: { state: RunState }) {
   const ready = state.kind === "ready";
 
   return (
-    <footer className="rounded-[6px] border border-[var(--color-rule)] bg-[var(--color-paper-elevated)] px-5 py-4 text-sm leading-6 text-[var(--color-ink-secondary)]">
+    <footer className="rounded-[6px] border border-[var(--border)] bg-[var(--card)] px-5 py-4 text-sm leading-6 text-[var(--color-gray-600)]">
       <p>
-        <span className="font-semibold text-[var(--color-ink)]">Execution:</span>{" "}
+        <span className="font-semibold text-[var(--foreground)]">Execution:</span>{" "}
         {ready
           ? `Rust axiom-rules-engine ${state.runtime.engineVersion}, artifact format ${state.runtime.artifactFormatVersion}, compiled to WebAssembly and running in this browser.`
           : "Axiom Rules Engine WebAssembly runtime loading in this browser."}{" "}
         The calculation compiles{" "}
-        <code className="font-mono text-[0.86em] text-[var(--color-ink)]">
+        <code className="font-mono text-[0.86em] text-[var(--foreground)]">
           {RULESPEC_TARGET}
         </code>{" "}
         from the bundled RuleSpec YAML; no hosted calculation API is called.

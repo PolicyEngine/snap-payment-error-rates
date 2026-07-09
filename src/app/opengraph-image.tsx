@@ -6,19 +6,20 @@ import { join } from "node:path";
 export const runtime = "nodejs";
 
 export const alt =
-  "SNAP payment error rates and the OBBBA state cost share — Axiom Foundation";
+  "SNAP payment error rates and the state cost share — PolicyEngine";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-// Axiom design tokens (kept in sync with @axiom-foundation/ui/tokens.css).
-const PAPER = "#faf9f6";
-const INK = "#1c1917";
-const INK_SECONDARY = "#57534e";
-const INK_MUTED = "#78716c";
-const ACCENT = "#92400e";
-const RULE = "#e7e5e4";
+// PolicyEngine design tokens (kept in sync with @policyengine/ui-kit theme).
+const BACKGROUND = "#FFFFFF"; // --background
+const FOREGROUND = "#101828"; // gray-900
+const GRAY_600 = "#475569";
+const GRAY_500 = "#64748B";
+const TEAL = "#319795"; // --chart-1
+const TEAL_700 = "#285E61";
+const BORDER = "#E2E8F0"; // --border
 
-const FONT_DIR = join(process.cwd(), "node_modules/geist/dist/fonts");
+const FONT_DIR = join(process.cwd(), "node_modules/@fontsource");
 
 type Font = NonNullable<
   ConstructorParameters<typeof ImageResponse>[1]
@@ -28,19 +29,27 @@ type Font = NonNullable<
 
 function loadFont(rel: string, name: string, weight: 400 | 600): Font | null {
   try {
-    return { name, data: readFileSync(join(FONT_DIR, rel)), weight, style: "normal" };
+    return {
+      name,
+      data: readFileSync(join(FONT_DIR, rel)),
+      weight,
+      style: "normal",
+    };
   } catch {
-    // If the font can't be read at build time we fall back to Satori's
-    // default face rather than failing the build.
+    // Fall back to Satori's default face rather than failing the build.
     return null;
   }
 }
 
 export default function OpengraphImage() {
   const fonts = [
-    loadFont("geist-sans/Geist-Regular.ttf", "Geist", 400),
-    loadFont("geist-sans/Geist-SemiBold.ttf", "Geist", 600),
-    loadFont("geist-mono/GeistMono-Regular.ttf", "Geist Mono", 400),
+    loadFont("inter/files/inter-latin-400-normal.woff", "Inter", 400),
+    loadFont("inter/files/inter-latin-600-normal.woff", "Inter", 600),
+    loadFont(
+      "jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff",
+      "JetBrains Mono",
+      400,
+    ),
   ].filter((f): f is Font => f !== null);
 
   return new ImageResponse(
@@ -53,29 +62,40 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "space-between",
           padding: "76px 80px",
-          background: PAPER,
-          fontFamily: "Geist",
+          background: BACKGROUND,
+          fontFamily: "Inter",
           position: "relative",
         }}
       >
-        {/* Faint editorial ∀ mark, bottom-right marginalia. Drawn as a path
-            (same geometry as the favicon) rather than a font glyph so it
-            renders identically regardless of the available typeface. */}
-        <svg
-          width={560}
-          height={560}
-          viewBox="0 0 100 100"
-          style={{ position: "absolute", bottom: -130, right: -60, opacity: 0.05 }}
+        {/* Band ramp marginalia: the statutory 0/5/10/15% tiers. */}
+        <div
+          style={{
+            position: "absolute",
+            right: 80,
+            bottom: 96,
+            display: "flex",
+            alignItems: "flex-end",
+            gap: 10,
+          }}
         >
-          <g transform="translate(14, 10) scale(0.37)">
-            <g transform="translate(0,290) scale(1,-1)">
-              <path
-                d="M29.45 290L6.51 290L86.80 69.90L114.70 69.90L194.68 290L171.74 290L148.18 223.97L53.01 223.97L29.45 290ZM100.75 88.81L60.14 203.51L141.05 203.51L100.75 88.81Z"
-                fill={ACCENT}
-              />
-            </g>
-          </g>
-        </svg>
+          {[
+            { h: 40, c: "#E8F2F2" },
+            { h: 78, c: "#AFD3D1" },
+            { h: 118, c: "#74B4B2" },
+            { h: 160, c: TEAL },
+          ].map((bar, index) => (
+            <div
+              key={index}
+              style={{
+                width: 54,
+                height: bar.h,
+                background: bar.c,
+                borderRadius: 6,
+                border: `1px solid ${BORDER}`,
+              }}
+            />
+          ))}
+        </div>
 
         {/* Eyebrow */}
         <div
@@ -83,15 +103,15 @@ export default function OpengraphImage() {
             display: "flex",
             alignItems: "center",
             gap: 16,
-            fontFamily: "Geist Mono",
+            fontFamily: "JetBrains Mono",
             fontSize: 22,
             letterSpacing: 6,
             textTransform: "uppercase",
-            color: INK_MUTED,
+            color: GRAY_500,
           }}
         >
-          <span style={{ color: ACCENT }}>Axiom Foundation</span>
-          <span style={{ color: RULE }}>/</span>
+          <span style={{ color: TEAL_700, fontWeight: 600 }}>PolicyEngine</span>
+          <span style={{ color: BORDER }}>/</span>
           <span>SNAP quality control</span>
         </div>
 
@@ -100,12 +120,12 @@ export default function OpengraphImage() {
           <div
             style={{
               display: "flex",
-              fontSize: 82,
+              fontSize: 80,
               fontWeight: 600,
               letterSpacing: -2.5,
-              lineHeight: 1.04,
-              color: INK,
-              maxWidth: 940,
+              lineHeight: 1.06,
+              color: FOREGROUND,
+              maxWidth: 980,
             }}
           >
             SNAP error rates now carry a price. How much is noise?
@@ -113,14 +133,14 @@ export default function OpengraphImage() {
           <div
             style={{
               display: "flex",
-              fontSize: 30,
+              fontSize: 29,
               lineHeight: 1.4,
-              color: INK_SECONDARY,
-              maxWidth: 880,
+              color: GRAY_600,
+              maxWidth: 860,
             }}
           >
-            FY2025 rates, the 0–15% OBBBA cost share, and the sampling error
-            that decides nine-figure band assignments.
+            FY2025 payment error rates, the 0–15% state cost share, and the
+            sampling error that decides nine-figure band assignments.
           </div>
         </div>
 
@@ -130,19 +150,19 @@ export default function OpengraphImage() {
             display: "flex",
             alignItems: "center",
             gap: 14,
-            fontFamily: "Geist Mono",
+            fontFamily: "JetBrains Mono",
             fontSize: 22,
             letterSpacing: 2,
-            color: INK_MUTED,
+            color: GRAY_500,
           }}
         >
           <span
             style={{
               display: "flex",
               padding: "8px 16px",
-              border: `1px solid ${RULE}`,
+              border: `1px solid ${BORDER}`,
               borderRadius: 6,
-              color: INK,
+              color: FOREGROUND,
             }}
           >
             7 U.S.C. 2013(a)(2)

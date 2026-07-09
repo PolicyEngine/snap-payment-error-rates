@@ -8,21 +8,21 @@ export default function Home() {
   return (
     <section className="min-h-screen px-5 pb-12 pt-28 md:px-8 md:pt-32">
       <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-8">
-        <div className="grid gap-8 border-b border-[var(--color-rule)] pb-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1.15fr)] lg:items-end">
+        <div className="grid gap-8 border-b border-[var(--border)] pb-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1.15fr)] lg:items-end">
           <div>
-            <p className="mb-3 font-mono text-[0.7rem] uppercase tracking-[0.24em] text-[var(--color-ink-muted)]">
+            <p className="mb-3 font-mono text-[0.7rem] uppercase tracking-[0.24em] text-[var(--muted-foreground)]">
               SNAP quality control · FY2025 rates published June 24, 2026
             </p>
-            <h1 className="max-w-[760px] text-4xl font-semibold leading-[1.05] tracking-[-0.03em] text-[var(--color-ink)] md:text-6xl">
+            <h1 className="max-w-[760px] text-4xl font-semibold leading-[1.05] tracking-[-0.03em] text-[var(--foreground)] md:text-6xl">
               SNAP error rates now carry a price. How much of the bill is
               statistical noise?
             </h1>
           </div>
-          <div className="max-w-[660px] text-base leading-7 text-[var(--color-ink-secondary)] md:text-lg">
+          <div className="max-w-[660px] text-base leading-7 text-[var(--color-gray-600)] md:text-lg">
             <p>
               Starting FY2028, states pay 0–15% of SNAP benefit costs based on
               their measured payment error rate (
-              <code className="rounded bg-[var(--color-rule-subtle)] px-1.5 py-0.5 font-mono text-[0.85em] text-[var(--color-ink)]">
+              <code className="rounded bg-[var(--color-gray-100)] px-1.5 py-0.5 font-mono text-[0.85em] text-[var(--foreground)]">
                 7 U.S.C. 2013(a)(2)
               </code>
               , added by OBBBA §10105). But each state&apos;s rate comes from a
@@ -59,12 +59,12 @@ export default function Home() {
 
         <ErrorRateExplorer />
 
-        <div className="grid gap-6 border-t border-[var(--color-rule)] pt-8 md:grid-cols-3">
+        <div className="grid gap-6 border-t border-[var(--border)] pt-8 md:grid-cols-3">
           <article>
-            <h2 className="mb-2 text-lg font-semibold tracking-[-0.01em] text-[var(--color-ink)]">
+            <h2 className="mb-2 text-lg font-semibold tracking-[-0.01em] text-[var(--foreground)]">
               Persistent differences are real
             </h2>
-            <p className="text-sm leading-6 text-[var(--color-ink-secondary)]">
+            <p className="text-sm leading-6 text-[var(--color-gray-600)]">
               States differ durably — South Dakota has measured under 4% for
               years while several states sit persistently above 10%. That
               between-state signal is much larger than sampling error. The
@@ -73,10 +73,10 @@ export default function Home() {
             </p>
           </article>
           <article>
-            <h2 className="mb-2 text-lg font-semibold tracking-[-0.01em] text-[var(--color-ink)]">
+            <h2 className="mb-2 text-lg font-semibold tracking-[-0.01em] text-[var(--foreground)]">
               Year-to-year movement ≈ noise
             </h2>
-            <p className="text-sm leading-6 text-[var(--color-ink-secondary)]">
+            <p className="text-sm leading-6 text-[var(--color-gray-600)]">
               For most states, FY2022–25 rate swings are about the size
               sampling error predicts (ratio ≈ 1) — apparent
               &quot;improvement&quot; or &quot;deterioration&quot; between
@@ -86,10 +86,10 @@ export default function Home() {
             </p>
           </article>
           <article>
-            <h2 className="mb-2 text-lg font-semibold tracking-[-0.01em] text-[var(--color-ink)]">
+            <h2 className="mb-2 text-lg font-semibold tracking-[-0.01em] text-[var(--foreground)]">
               Bigger samples would firm it up
             </h2>
-            <p className="text-sm leading-6 text-[var(--color-ink-secondary)]">
+            <p className="text-sm leading-6 text-[var(--color-gray-600)]">
               Sampling error shrinks with √n: quadrupling review samples halves
               it. Use the slider above to see how much of each state&apos;s
               band uncertainty a larger QC sample would remove — and what it
@@ -98,14 +98,14 @@ export default function Home() {
           </article>
         </div>
 
-        <footer className="rounded-[6px] border border-[var(--color-rule)] bg-[var(--color-paper-elevated)] px-5 py-4 text-sm leading-6 text-[var(--color-ink-secondary)]">
+        <footer className="rounded-[6px] border border-[var(--border)] bg-[var(--card)] px-5 py-4 text-sm leading-6 text-[var(--color-gray-600)]">
           <p>
             Official FNS/FNA payment error rates (FY2017–19, FY2022–25),
             FY2025 state benefit issuance, and sampling errors bootstrapped
             from the FY2024 SNAP QC public-use file —{" "}
             <Link
               href="/methodology"
-              className="font-semibold text-[var(--color-accent)] underline decoration-[var(--color-rule-strong)] underline-offset-2 hover:text-[var(--color-accent-hover)]"
+              className="font-semibold text-[var(--primary)] underline decoration-[var(--color-gray-400)] underline-offset-2 hover:text-[var(--color-teal-700)]"
             >
               full methodology and sources
             </Link>
@@ -113,7 +113,7 @@ export default function Home() {
             275.23(d)(2)) remains in force;{" "}
             <Link
               href="/qc-liability"
-              className="font-semibold text-[var(--color-accent)] underline decoration-[var(--color-rule-strong)] underline-offset-2 hover:text-[var(--color-accent-hover)]"
+              className="font-semibold text-[var(--primary)] underline decoration-[var(--color-gray-400)] underline-offset-2 hover:text-[var(--color-teal-700)]"
             >
               compute those liabilities here
             </Link>
@@ -135,14 +135,14 @@ function Stat({
   detail: string;
 }) {
   return (
-    <article className="rounded-[6px] border border-[var(--color-rule)] bg-[var(--color-paper-elevated)] p-5 shadow-[0_18px_48px_rgba(28,25,23,0.06)]">
-      <p className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
+    <article className="rounded-[6px] border border-[var(--border)] bg-[var(--card)] p-5 shadow-[0_18px_48px_rgba(16,24,40,0.06)]">
+      <p className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-[var(--muted-foreground)]">
         {label}
       </p>
-      <p className="mt-3 text-3xl font-semibold leading-none tracking-[-0.02em] text-[var(--color-ink)]">
+      <p className="mt-3 text-3xl font-semibold leading-none tracking-[-0.02em] text-[var(--foreground)]">
         {value}
       </p>
-      <p className="mt-3 text-sm leading-5 text-[var(--color-ink-secondary)]">
+      <p className="mt-3 text-sm leading-5 text-[var(--color-gray-600)]">
         {detail}
       </p>
     </article>

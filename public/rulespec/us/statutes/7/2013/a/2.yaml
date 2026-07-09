@@ -1,0 +1,306 @@
+format: rulespec/v1
+module:
+  proof_validation:
+    required: true
+  source_verification:
+    corpus_citation_path: us/statute/7/2013
+  summary: |-
+    Quality control incentives added by Pub. L. 119-21 §10105 (One Big Beautiful Bill Act). Beginning fiscal year 2028, a State pays a share of the cost of SNAP allotments determined by its payment error rate: 0 percent below 6 percent; 5 percent at 6 up to 8 percent; 10 percent at 8 up to 10 percent; and 15 percent at 10 percent or above. Implementation is delayed for a State whose payment error rate multiplied by 1.5 equals or exceeds 20 percent.
+rules:
+  - name: state_share_zero_threshold
+    kind: parameter
+    dtype: Rate
+    source: 7 U.S.C. 2013(a)(2)(B)(i)(I)
+    metadata:
+      proof:
+        atoms:
+          - path: versions[0].formula
+            kind: parameter
+            source:
+              corpus_citation_path: us/statute/7/2013
+              excerpt: "less than 6 percent, the Federal share of the cost of the allotment described in paragraph (1) for that State in a fiscal year shall be 100 percent, and the State share shall be 0 percent"
+    versions:
+      - effective_from: '2027-10-01'
+        formula: |-
+          0.06
+
+  - name: state_share_low_threshold
+    kind: parameter
+    dtype: Rate
+    source: 7 U.S.C. 2013(a)(2)(B)(i)(II)
+    metadata:
+      proof:
+        atoms:
+          - path: versions[0].formula
+            kind: parameter
+            source:
+              corpus_citation_path: us/statute/7/2013
+              excerpt: "equal to or greater than 6 percent but less than 8 percent, the Federal share of the cost of the allotment described in paragraph (1) for that State in a fiscal year shall be 95 percent, and the State share shall be 5 percent"
+    versions:
+      - effective_from: '2027-10-01'
+        formula: |-
+          0.08
+
+  - name: state_share_high_threshold
+    kind: parameter
+    dtype: Rate
+    source: 7 U.S.C. 2013(a)(2)(B)(i)(IV)
+    metadata:
+      proof:
+        atoms:
+          - path: versions[0].formula
+            kind: parameter
+            source:
+              corpus_citation_path: us/statute/7/2013
+              excerpt: "equal to or greater than 10 percent, the Federal share of the cost of the allotment described in paragraph (1) for that State in a fiscal year shall be 85 percent, and the State share shall be 15 percent"
+    versions:
+      - effective_from: '2027-10-01'
+        formula: |-
+          0.10
+
+  - name: state_share_low_rate
+    kind: parameter
+    dtype: Rate
+    source: 7 U.S.C. 2013(a)(2)(B)(i)(II)
+    metadata:
+      proof:
+        atoms:
+          - path: versions[0].formula
+            kind: parameter
+            source:
+              corpus_citation_path: us/statute/7/2013
+              excerpt: "the State share shall be 5 percent"
+    versions:
+      - effective_from: '2027-10-01'
+        formula: |-
+          0.05
+
+  - name: state_share_middle_rate
+    kind: parameter
+    dtype: Rate
+    source: 7 U.S.C. 2013(a)(2)(B)(i)(III)
+    metadata:
+      proof:
+        atoms:
+          - path: versions[0].formula
+            kind: parameter
+            source:
+              corpus_citation_path: us/statute/7/2013
+              excerpt: "the State share shall be 10 percent"
+    versions:
+      - effective_from: '2027-10-01'
+        formula: |-
+          0.10
+
+  - name: state_share_high_rate
+    kind: parameter
+    dtype: Rate
+    source: 7 U.S.C. 2013(a)(2)(B)(i)(IV)
+    metadata:
+      proof:
+        atoms:
+          - path: versions[0].formula
+            kind: parameter
+            source:
+              corpus_citation_path: us/statute/7/2013
+              excerpt: "the State share shall be 15 percent"
+    versions:
+      - effective_from: '2027-10-01'
+        formula: |-
+          0.15
+
+  - name: delayed_implementation_multiplier
+    kind: parameter
+    dtype: Rate
+    source: 7 U.S.C. 2013(a)(2)(B)(iii)
+    metadata:
+      proof:
+        atoms:
+          - path: versions[0].formula
+            kind: parameter
+            source:
+              corpus_citation_path: us/statute/7/2013
+              excerpt: "payment error rate for fiscal year 2025 multiplied by 1.5"
+    versions:
+      - effective_from: '2027-10-01'
+        formula: |-
+          1.5
+
+  - name: delayed_implementation_threshold
+    kind: parameter
+    dtype: Rate
+    source: 7 U.S.C. 2013(a)(2)(B)(iii)
+    metadata:
+      proof:
+        atoms:
+          - path: versions[0].formula
+            kind: parameter
+            source:
+              corpus_citation_path: us/statute/7/2013
+              excerpt: "is equal to or greater than 20 percent"
+    versions:
+      - effective_from: '2027-10-01'
+        formula: |-
+          0.20
+
+  - name: state_share_rate_upper_tiers
+    kind: derived
+    entity: StateAgency
+    dtype: Rate
+    period: Year
+    source: 7 U.S.C. 2013(a)(2)(B)(i)(III)-(IV)
+    metadata:
+      proof:
+        atoms:
+          - path: versions[0].formula
+            kind: condition
+            source:
+              corpus_citation_path: us/statute/7/2013
+              excerpt: "equal to or greater than 8 percent but less than 10 percent, the Federal share of the cost of the allotment described in paragraph (1) for that State in a fiscal year shall be 90 percent, and the State share shall be 10 percent"
+          - path: versions[0].formula
+            kind: import
+            import:
+              target: us:statutes/7/2013/a/2#state_share_high_threshold
+              output: state_share_high_threshold
+              hash: sha256:local
+          - path: versions[0].formula
+            kind: import
+            import:
+              target: us:statutes/7/2013/a/2#state_share_middle_rate
+              output: state_share_middle_rate
+              hash: sha256:local
+          - path: versions[0].formula
+            kind: import
+            import:
+              target: us:statutes/7/2013/a/2#state_share_high_rate
+              output: state_share_high_rate
+              hash: sha256:local
+    versions:
+      - effective_from: '2027-10-01'
+        formula: |-
+          if payment_error_rate < state_share_high_threshold: state_share_middle_rate else: state_share_high_rate
+
+  - name: state_share_rate_matching_tiers
+    kind: derived
+    entity: StateAgency
+    dtype: Rate
+    period: Year
+    source: 7 U.S.C. 2013(a)(2)(B)(i)(II)-(IV)
+    metadata:
+      proof:
+        atoms:
+          - path: versions[0].formula
+            kind: condition
+            source:
+              corpus_citation_path: us/statute/7/2013
+              excerpt: "equal to or greater than 6 percent but less than 8 percent, the Federal share of the cost of the allotment described in paragraph (1) for that State in a fiscal year shall be 95 percent, and the State share shall be 5 percent"
+          - path: versions[0].formula
+            kind: import
+            import:
+              target: us:statutes/7/2013/a/2#state_share_low_threshold
+              output: state_share_low_threshold
+              hash: sha256:local
+          - path: versions[0].formula
+            kind: import
+            import:
+              target: us:statutes/7/2013/a/2#state_share_low_rate
+              output: state_share_low_rate
+              hash: sha256:local
+          - path: versions[0].formula
+            kind: import
+            import:
+              target: us:statutes/7/2013/a/2#state_share_rate_upper_tiers
+              output: state_share_rate_upper_tiers
+              hash: sha256:local
+    versions:
+      - effective_from: '2027-10-01'
+        formula: |-
+          if payment_error_rate < state_share_low_threshold: state_share_low_rate else: state_share_rate_upper_tiers
+
+  - name: state_share_rate
+    kind: derived
+    entity: StateAgency
+    dtype: Rate
+    period: Year
+    source: 7 U.S.C. 2013(a)(2)(B)(i)
+    metadata:
+      proof:
+        atoms:
+          - path: versions[0].formula
+            kind: condition
+            source:
+              corpus_citation_path: us/statute/7/2013
+              excerpt: "less than 6 percent, the Federal share of the cost of the allotment described in paragraph (1) for that State in a fiscal year shall be 100 percent, and the State share shall be 0 percent"
+          - path: versions[0].formula
+            kind: import
+            import:
+              target: us:statutes/7/2013/a/2#state_share_zero_threshold
+              output: state_share_zero_threshold
+              hash: sha256:local
+          - path: versions[0].formula
+            kind: import
+            import:
+              target: us:statutes/7/2013/a/2#state_share_rate_matching_tiers
+              output: state_share_rate_matching_tiers
+              hash: sha256:local
+    versions:
+      - effective_from: '2027-10-01'
+        formula: |-
+          if payment_error_rate < state_share_zero_threshold: 0 else: state_share_rate_matching_tiers
+
+  - name: delayed_implementation
+    kind: derived
+    entity: StateAgency
+    dtype: Judgment
+    period: Year
+    source: 7 U.S.C. 2013(a)(2)(B)(iii)
+    metadata:
+      proof:
+        atoms:
+          - path: versions[0].formula
+            kind: condition
+            source:
+              corpus_citation_path: us/statute/7/2013
+              excerpt: "payment error rate for fiscal year 2025 multiplied by 1.5 is equal to or greater than 20 percent"
+          - path: versions[0].formula
+            kind: import
+            import:
+              target: us:statutes/7/2013/a/2#delayed_implementation_multiplier
+              output: delayed_implementation_multiplier
+              hash: sha256:local
+          - path: versions[0].formula
+            kind: import
+            import:
+              target: us:statutes/7/2013/a/2#delayed_implementation_threshold
+              output: delayed_implementation_threshold
+              hash: sha256:local
+    versions:
+      - effective_from: '2027-10-01'
+        formula: |-
+          payment_error_rate * delayed_implementation_multiplier >= delayed_implementation_threshold
+
+  - name: state_share_amount
+    kind: derived
+    entity: StateAgency
+    dtype: Money
+    period: Year
+    unit: USD
+    source: 7 U.S.C. 2013(a)(2)(A)-(B)
+    metadata:
+      proof:
+        atoms:
+          - path: versions[0].formula
+            kind: formula
+            source:
+              corpus_citation_path: us/statute/7/2013
+              excerpt: "State matching funds requirements for the cost of the allotment"
+          - path: versions[0].formula
+            kind: import
+            import:
+              target: us:statutes/7/2013/a/2#state_share_rate
+              output: state_share_rate
+              hash: sha256:local
+    versions:
+      - effective_from: '2027-10-01'
+        formula: |-
+          value_of_all_allotments_issued * state_share_rate

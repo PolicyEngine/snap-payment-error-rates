@@ -3,7 +3,7 @@ import Link from "next/link";
 import { DATA } from "@/lib/obbba";
 
 export const metadata: Metadata = {
-  title: "Methodology — SNAP payment error rates and the OBBBA cost share",
+  title: "Methodology — SNAP payment error rates | PolicyEngine",
   description:
     "Data sources, statutory basis, and statistical methods behind the SNAP payment error rate uncertainty explorer.",
 };
@@ -40,10 +40,10 @@ export default function Methodology() {
   return (
     <section className="min-h-screen px-5 pb-16 pt-28 md:px-8 md:pt-32">
       <div className="mx-auto w-full max-w-[860px]">
-        <p className="mb-3 font-mono text-[0.7rem] uppercase tracking-[0.24em] text-[var(--color-ink-muted)]">
+        <p className="mb-3 font-mono text-[0.7rem] uppercase tracking-[0.24em] text-[var(--muted-foreground)]">
           Methodology
         </p>
-        <h1 className="text-3xl font-semibold leading-tight tracking-[-0.02em] text-[var(--color-ink)] md:text-5xl">
+        <h1 className="text-3xl font-semibold leading-tight tracking-[-0.02em] text-[var(--foreground)] md:text-5xl">
           How these numbers are built
         </h1>
 
@@ -76,6 +76,14 @@ export default function Methodology() {
             FY2029; qualifying on the FY2026 rate delays it to FY2030. Seven
             jurisdictions qualify on FY2025 rates:{" "}
             {DATA.national.delayedStatesFY2028.join(", ")}.
+          </p>
+          <p>
+            These tiers are not hand-coded in the app: the provision is encoded
+            as a RuleSpec module and compiled by the Axiom Foundation&apos;s
+            open-source rules engine, which recomputes every state&apos;s band
+            and delay determination in your browser. The test suite executes
+            the compiled statute against a dense sweep of rates and all 53
+            published assignments.
           </p>
 
           <h2>Sampling error</h2>
@@ -142,32 +150,32 @@ export default function Methodology() {
           {SOURCES.map((s) => (
             <li
               key={s.url}
-              className="rounded-[6px] border border-[var(--color-rule)] bg-[var(--color-paper-elevated)] px-4 py-3"
+              className="rounded-[6px] border border-[var(--border)] bg-[var(--card)] px-4 py-3"
             >
               <a
                 href={s.url}
-                className="font-semibold text-[var(--color-accent)] underline decoration-[var(--color-rule-strong)] underline-offset-2 hover:text-[var(--color-accent-hover)]"
+                className="font-semibold text-[var(--primary)] underline decoration-[var(--color-gray-400)] underline-offset-2 hover:text-[var(--color-teal-700)]"
               >
                 {s.label}
               </a>
-              <p className="mt-1 text-sm leading-5 text-[var(--color-ink-secondary)]">
+              <p className="mt-1 text-sm leading-5 text-[var(--color-gray-600)]">
                 {s.note}
               </p>
             </li>
           ))}
         </ul>
 
-        <p className="mt-8 text-sm leading-6 text-[var(--color-ink-muted)]">
+        <p className="mt-8 text-sm leading-6 text-[var(--muted-foreground)]">
           The build pipeline (source tables, pinned QC file, bootstrap, and
           every derived number) is in the repository&apos;s{" "}
-          <code className="rounded bg-[var(--color-rule-subtle)] px-1 py-0.5 font-mono text-[0.9em]">
+          <code className="rounded bg-[var(--color-gray-100)] px-1 py-0.5 font-mono text-[0.9em]">
             data/pipeline.py
           </code>
           . The separate pre-OBBBA QC liability system under 7 CFR
           275.23(d)(2) is computed on the{" "}
           <Link
             href="/qc-liability"
-            className="font-semibold text-[var(--color-accent)] underline decoration-[var(--color-rule-strong)] underline-offset-2 hover:text-[var(--color-accent-hover)]"
+            className="font-semibold text-[var(--primary)] underline decoration-[var(--color-gray-400)] underline-offset-2 hover:text-[var(--color-teal-700)]"
           >
             QC liability page
           </Link>{" "}
@@ -180,7 +188,7 @@ export default function Methodology() {
 
 function Prose({ children }: { children: React.ReactNode }) {
   return (
-    <div className="prose-headings:font-semibold mt-6 grid gap-3 text-base leading-7 text-[var(--color-ink-secondary)] [&_h2]:mt-5 [&_h2]:text-xl [&_h2]:tracking-[-0.01em] [&_h2]:text-[var(--color-ink)]">
+    <div className="prose-headings:font-semibold mt-6 grid gap-3 text-base leading-7 text-[var(--color-gray-600)] [&_h2]:mt-5 [&_h2]:text-xl [&_h2]:tracking-[-0.01em] [&_h2]:text-[var(--foreground)]">
       {children}
     </div>
   );

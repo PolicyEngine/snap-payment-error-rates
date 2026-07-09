@@ -1,11 +1,13 @@
 @import "tailwindcss";
-@import "@axiom-foundation/ui/tokens.css";
+@import "@policyengine/ui-kit/theme.css";
 
-/* Tailwind v4 ignores node_modules by default, so the utility classes used
-   inside the shared @axiom-foundation/ui components (Nav, Footer) are never
-   generated. Register the package as a content source so the header/footer
-   render with their intended layout. */
-@source "../../node_modules/@axiom-foundation/ui/dist";
+/* next/font self-hosts Inter and JetBrains Mono; point the ui-kit font
+   variables at the loaded families. */
+:root {
+  --font-sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  --font-mono: var(--font-jbmono), "Fira Code", Consolas, monospace;
+}
 
 * {
   box-sizing: border-box;
@@ -18,12 +20,14 @@ body {
 
 body {
   margin: 0;
-  background: var(--color-paper);
-  color: var(--color-ink);
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
 }
 
 button,
-input {
+input,
+select {
   font: inherit;
 }
 
