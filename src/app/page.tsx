@@ -1,5 +1,150 @@
-import { SnapPerCalculator } from "@/components/SnapPerCalculator";
+import Link from "next/link";
+import { ErrorRateExplorer } from "@/components/ErrorRateExplorer";
+import { DATA, money } from "@/lib/obbba";
 
 export default function Home() {
-  return <SnapPerCalculator />;
+  const national = DATA.national;
+  const ny = DATA.states.find((s) => s.abbrev === "NY")!;
+  return (
+    <section className="min-h-screen px-5 pb-12 pt-28 md:px-8 md:pt-32">
+      <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-8">
+        <div className="grid gap-8 border-b border-[var(--color-rule)] pb-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1.15fr)] lg:items-end">
+          <div>
+            <p className="mb-3 font-mono text-[0.7rem] uppercase tracking-[0.24em] text-[var(--color-ink-muted)]">
+              SNAP quality control · FY2025 rates published June 24, 2026
+            </p>
+            <h1 className="max-w-[760px] text-4xl font-semibold leading-[1.05] tracking-[-0.03em] text-[var(--color-ink)] md:text-6xl">
+              SNAP error rates now carry a price. How much of the bill is
+              statistical noise?
+            </h1>
+          </div>
+          <div className="max-w-[660px] text-base leading-7 text-[var(--color-ink-secondary)] md:text-lg">
+            <p>
+              Starting FY2028, states pay 0–15% of SNAP benefit costs based on
+              their measured payment error rate (
+              <code className="rounded bg-[var(--color-rule-subtle)] px-1.5 py-0.5 font-mono text-[0.85em] text-[var(--color-ink)]">
+                7 U.S.C. 2013(a)(2)
+              </code>
+              , added by OBBBA §10105). But each state&apos;s rate comes from a
+              quality-control review of a few hundred to a thousand cases — a
+              sample, with sampling error. Near a 6%, 8%, 10%, or 13.33%
+              cutoff, the difference between bands — often nine figures — can
+              come down to the draw.
+            </p>
+          </div>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-4">
+          <Stat
+            label="National FY2025 error rate"
+            value={`${national.fy2025.per.toFixed(2)}%`}
+            detail={`${national.fy2025.over.toFixed(2)}% overpayments + ${national.fy2025.under.toFixed(2)}% underpayments; tolerance threshold $57`}
+          />
+          <Stat
+            label="FY2028 state bill at published rates"
+            value={money(national.totalPointCostFY2028)}
+            detail={`Statutory shares × FY2025 issuance of ${money(national.issuanceFY2025)}; ${national.delayedStatesFY2028.length} jurisdictions delayed to FY2029`}
+          />
+          <Stat
+            label="Noise-weighted expectation"
+            value={money(national.totalExpectedCostFY2028)}
+            detail="Probability-weighted across bands a re-measured rate could land in"
+          />
+          <Stat
+            label="New York's band-flip risk"
+            value={`${Math.round(ny.flipProb * 100)}%`}
+            detail={`Measured ${ny.fy2025.per.toFixed(2)}%, just ${(20 / 1.5 - ny.fy2025.per).toFixed(2)}ppt below the 13.33% delay line`}
+          />
+        </div>
+
+        <ErrorRateExplorer />
+
+        <div className="grid gap-6 border-t border-[var(--color-rule)] pt-8 md:grid-cols-3">
+          <article>
+            <h2 className="mb-2 text-lg font-semibold tracking-[-0.01em] text-[var(--color-ink)]">
+              Persistent differences are real
+            </h2>
+            <p className="text-sm leading-6 text-[var(--color-ink-secondary)]">
+              States differ durably — South Dakota has measured under 4% for
+              years while several states sit persistently above 10%. That
+              between-state signal is much larger than sampling error. The
+              noise problem is different: a single year&apos;s draw decides
+              which side of a sharp cutoff a state lands on.
+            </p>
+          </article>
+          <article>
+            <h2 className="mb-2 text-lg font-semibold tracking-[-0.01em] text-[var(--color-ink)]">
+              Year-to-year movement ≈ noise
+            </h2>
+            <p className="text-sm leading-6 text-[var(--color-ink-secondary)]">
+              For most states, FY2022–25 rate swings are about the size
+              sampling error predicts (ratio ≈ 1) — apparent
+              &quot;improvement&quot; or &quot;deterioration&quot; between
+              adjacent years usually isn&apos;t evidence of either. Outliers
+              like New Jersey (14.33% → 6.86%) moved far more than noise
+              allows: real administrative change.
+            </p>
+          </article>
+          <article>
+            <h2 className="mb-2 text-lg font-semibold tracking-[-0.01em] text-[var(--color-ink)]">
+              Bigger samples would firm it up
+            </h2>
+            <p className="text-sm leading-6 text-[var(--color-ink-secondary)]">
+              Sampling error shrinks with √n: quadrupling review samples halves
+              it. Use the slider above to see how much of each state&apos;s
+              band uncertainty a larger QC sample would remove — and what it
+              does to the noise-weighted bill.
+            </p>
+          </article>
+        </div>
+
+        <footer className="rounded-[6px] border border-[var(--color-rule)] bg-[var(--color-paper-elevated)] px-5 py-4 text-sm leading-6 text-[var(--color-ink-secondary)]">
+          <p>
+            Official FNS/FNA payment error rates (FY2017–19, FY2022–25),
+            FY2025 state benefit issuance, and sampling errors bootstrapped
+            from the FY2024 SNAP QC public-use file —{" "}
+            <Link
+              href="/methodology"
+              className="font-semibold text-[var(--color-accent)] underline decoration-[var(--color-rule-strong)] underline-offset-2 hover:text-[var(--color-accent-hover)]"
+            >
+              full methodology and sources
+            </Link>
+            . The pre-OBBBA quality-control liability system (7 CFR
+            275.23(d)(2)) remains in force;{" "}
+            <Link
+              href="/qc-liability"
+              className="font-semibold text-[var(--color-accent)] underline decoration-[var(--color-rule-strong)] underline-offset-2 hover:text-[var(--color-accent-hover)]"
+            >
+              compute those liabilities here
+            </Link>
+            , executed by Axiom&apos;s compiled RuleSpec in your browser.
+          </p>
+        </footer>
+      </div>
+    </section>
+  );
+}
+
+function Stat({
+  label,
+  value,
+  detail,
+}: {
+  label: string;
+  value: string;
+  detail: string;
+}) {
+  return (
+    <article className="rounded-[6px] border border-[var(--color-rule)] bg-[var(--color-paper-elevated)] p-5 shadow-[0_18px_48px_rgba(28,25,23,0.06)]">
+      <p className="font-mono text-[0.68rem] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
+        {label}
+      </p>
+      <p className="mt-3 text-3xl font-semibold leading-none tracking-[-0.02em] text-[var(--color-ink)]">
+        {value}
+      </p>
+      <p className="mt-3 text-sm leading-5 text-[var(--color-ink-secondary)]">
+        {detail}
+      </p>
+    </article>
+  );
 }

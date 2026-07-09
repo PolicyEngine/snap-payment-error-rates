@@ -1,0 +1,67 @@
+               SUPPLEMENTAL NUTRITION ASSISTANCE PROGRAM: PAYMENT ERROR RATES
+                                       FISCAL YEAR 2025 1
+          State/Territory                  Over Payments                Under Payments             Payment Error Rates 2
+     ALABAMA                                      8.82                       0.70                           9.52
+     ALASKA                                      20.58                       2.57                          23.15
+     ARIZONA                                      8.63                       2.16                          10.80
+     ARKANSAS                                     7.97                       0.84                           8.81
+     CALIFORNIA                                  10.06                       0.87                          10.93
+     COLORADO                                     8.52                       1.57                          10.09
+     CONNECTICUT                                  7.43                       1.65                           9.08
+     DELAWARE                                    14.55                       1.45                          16.00
+     DISTRICT OF COLUMBIA                        15.33                       3.33                          18.66
+     FLORIDA                                     11.54                       1.43                          12.97
+     GEORGIA                                     13.62                       1.59                          15.21
+     GUAM                                         9.52                       2.18                          11.70
+     HAWAII                                       9.94                       0.98                          10.92
+     IDAHO                                        3.45                       0.40                           3.85
+     ILLINOIS                                    13.33                       1.33                          14.67
+     INDIANA                                      7.73                       2.04                           9.77
+     IOWA                                         4.63                       0.71                           5.34
+     KANSAS                                       8.46                       0.98                           9.44
+     KENTUCKY                                     4.02                       0.67                           4.70
+     LOUISIANA                                    6.84                       1.30                           8.14
+     MAINE                                        9.33                       1.48                          10.81
+     MARYLAND                                    10.89                       2.19                          13.08
+     MASSACHUSETTS                               11.83                       0.66                          12.49
+     MICHIGAN                                     8.66                       1.23                           9.89
+     MINNESOTA                                    9.86                       2.72                          12.58
+     MISSISSIPPI                                  7.57                       1.94                           9.51
+     MISSOURI                                     8.24                       0.43                           8.67
+     MONTANA                                      7.51                       1.35                           8.86
+     NEBRASKA                                     4.82                       1.08                           5.90
+     NEVADA                                       5.69                       0.53                           6.22
+     NEW HAMPSHIRE                                6.15                       2.70                           8.85
+     NEW JERSEY                                   4.81                       2.05                           6.86
+     NEW MEXICO                                  15.76                       1.06                          16.81
+     NEW YORK                                    12.06                       1.12                          13.18
+     NORTH CAROLINA                               5.76                       1.60                           7.36
+     NORTH DAKOTA                                 7.48                       2.40                           9.89
+     OHIO                                         5.10                       1.66                           6.76
+     OKLAHOMA                                     9.63                       1.41                          11.04
+     OREGON                                      13.88                       0.26                          14.14
+     PENNSYLVANIA                                 8.03                       1.18                           9.21
+     RHODE ISLAND                                11.63                       0.79                          12.42
+     SOUTH CAROLINA                               7.83                       0.97                           8.80
+     SOUTH DAKOTA                                 2.05                       0.42                           2.47
+     TENNESSEE                                    7.84                       1.60                           9.44
+     TEXAS                                        6.99                       2.35                           9.34
+     UTAH                                         4.64                       0.89                           5.54
+     VERMONT                                      5.06                       0.32                           5.38
+     VIRGIN ISLANDS                               4.17                       1.19                           5.36
+     VIRGINIA                                    10.30                       2.02                          12.32
+     WASHINGTON                                   6.15                       0.83                           6.98
+     WEST VIRGINIA                                6.22                       0.46                           6.69
+     WISCONSIN                                    5.32                       0.40                           5.72
+     WYOMING                                      3.55                       0.41                           3.96
+     UNITED STATES                                 9.28                        1.33                           10.62
+
+1 Pursuant to Section 16(c)(1)(A)(ii) of the Food and Nutrition Act of 2008, as amended, the Department set the QC tolerance
+
+threshold at $37 for fiscal year (FY) 2014 and adjusts the threshold each year. For FY 2025, the tolerance threshold is $57.
+2 Due to rounding, the payment error rate may not always equal the sum of the over payment and under payment error rate.
+
+
+
+USDA is an equal opportunity provider, employer, and lender.                                           Dated: June 24, 2026
+

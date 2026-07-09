@@ -6,7 +6,7 @@ import { join } from "node:path";
 export const runtime = "nodejs";
 
 export const alt =
-  "SNAP payment error rate liability calculator — Axiom Foundation";
+  "SNAP payment error rates and the OBBBA state cost share — Axiom Foundation";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -108,7 +108,7 @@ export default function OpengraphImage() {
               maxWidth: 940,
             }}
           >
-            Payment error rate liability calculator
+            SNAP error rates now carry a price. How much is noise?
           </div>
           <div
             style={{
@@ -119,8 +119,8 @@ export default function OpengraphImage() {
               maxWidth: 880,
             }}
           >
-            Compute SNAP liabilities under 7 CFR 275.23(d)(2) — run in your
-            browser by Axiom&apos;s compiled RuleSpec engine.
+            FY2025 rates, the 0–15% OBBBA cost share, and the sampling error
+            that decides nine-figure band assignments.
           </div>
         </div>
 
@@ -145,9 +145,9 @@ export default function OpengraphImage() {
               color: INK,
             }}
           >
-            7 CFR 275.23(d)(2)
+            7 U.S.C. 2013(a)(2)
           </span>
-          <span>No calculation API · runs client-side</span>
+          <span>FY2025 rates · 53 state agencies · $9.4B at stake</span>
         </div>
       </div>
     ),

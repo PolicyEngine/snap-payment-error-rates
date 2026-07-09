@@ -19,6 +19,8 @@ const DEFAULT_INPUTS: SnapPerInputs = {
 };
 
 const MILLION = 1_000_000;
+const MAX_ALLOTMENTS_MILLIONS = 1_000_000;
+const AXIOM_DEBOUNCE_MS = 180;
 
 const money = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -48,6 +50,10 @@ type RuntimeState =
 
 export function SnapPerCalculator() {
   const [inputs, setInputs] = useState<SnapPerInputs>(DEFAULT_INPUTS);
+  const [debouncedInputs, setDebouncedInputs] = useState<SnapPerInputs>(DEFAULT_INPUTS);
+  const [allotmentsMillionsDraft, setAllotmentsMillionsDraft] = useState(
+    String(DEFAULT_INPUTS.allotments / MILLION),
+  );
   const [runtimeState, setRuntimeState] = useState<RuntimeState>({ kind: "loading" });
 
   useEffect(() => {
@@ -75,20 +81,30 @@ export function SnapPerCalculator() {
     };
   }, []);
 
+  useEffect(() => {
+    const timeout = window.setTimeout(() => {
+      setDebouncedInputs(inputs);
+    }, AXIOM_DEBOUNCE_MS);
+
+    return () => {
+      window.clearTimeout(timeout);
+    };
+  }, [inputs]);
+
   const state = useMemo<RunState>(() => {
     if (runtimeState.kind !== "ready") {
       return runtimeState;
     }
 
     try {
-      return runAxiom(runtimeState.runtime, inputs);
+      return runAxiom(runtimeState.runtime, debouncedInputs);
     } catch (error) {
       return {
         kind: "error",
         message: error instanceof Error ? error.message : "Axiom execution failed.",
       };
     }
-  }, [inputs, runtimeState]);
+  }, [debouncedInputs, runtimeState]);
 
   const result = state.kind === "ready" ? state.result : null;
   const parameters = state.kind === "ready" ? state.runtime.parameters : null;
@@ -179,14 +195,31 @@ export function SnapPerCalculator() {
                 id="allotments-millions"
                 type="number"
                 min={0}
+                max={MAX_ALLOTMENTS_MILLIONS}
                 step={10}
-                value={inputs.allotments / MILLION}
-                onChange={(event) =>
+                value={allotmentsMillionsDraft}
+                onBlur={() => {
+                  const allotments = parseAllotmentsMillions(
+                    allotmentsMillionsDraft,
+                    inputs.allotments,
+                  );
+                  setInputs((current) => ({ ...current, allotments }));
+                  setAllotmentsMillionsDraft(String(allotments / MILLION));
+                }}
+                onChange={(event) => {
+                  const rawValue = event.currentTarget.value;
+                  setAllotmentsMillionsDraft(rawValue);
+
+                  const parsed = Number(rawValue);
+                  if (!rawValue || !Number.isFinite(parsed)) {
+                    return;
+                  }
+
                   setInputs((current) => ({
                     ...current,
-                    allotments: readNumber(event.currentTarget.value, 0) * MILLION,
-                  }))
-                }
+                    allotments: clamp(parsed, 0, MAX_ALLOTMENTS_MILLIONS) * MILLION,
+                  }));
+                }}
                 className="h-11 w-full rounded-[4px] border border-[var(--color-rule-strong)] bg-[var(--color-paper)] px-3 font-mono text-sm text-[var(--color-ink)] outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-focus-ring)]"
               />
               <p className="mt-2 text-sm text-[var(--color-ink-muted)]">
@@ -610,6 +643,18 @@ function RuntimeFootnote({ state }: { state: RunState }) {
 function readNumber(value: string, fallback: number) {
   const parsed = Number(value);
   return Number.isFinite(parsed) ? parsed : fallback;
+}
+
+function parseAllotmentsMillions(value: string, fallback: number) {
+  const parsed = Number(value);
+  if (!Number.isFinite(parsed)) {
+    return fallback;
+  }
+  return clamp(parsed, 0, MAX_ALLOTMENTS_MILLIONS) * MILLION;
+}
+
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value));
 }
 
 function compactMoney(value: number) {

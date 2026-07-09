@@ -22,22 +22,22 @@ const serif = Newsreader({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://snap-per-penalty-tool.vercel.app"),
-  title: "SNAP payment error rate liability calculator — Axiom Foundation",
+  title: "SNAP payment error rates and the OBBBA state cost share — Axiom Foundation",
   description:
-    "Compute SNAP payment error rate liabilities under 7 CFR 275.23(d)(2). Inputs run against Axiom's compiled RuleSpec in your browser — no calculation API is called.",
+    "FY2025 SNAP payment error rates for all 53 state agencies, the 0–15% OBBBA cost share they trigger, and how much of each state's band assignment is statistical noise.",
   openGraph: {
     type: "website",
     siteName: "Axiom Foundation",
     url: "/",
-    title: "SNAP payment error rate liability calculator",
+    title: "SNAP error rates now carry a price. How much is noise?",
     description:
-      "Compute SNAP payment error rate liabilities under 7 CFR 275.23(d)(2), executed in your browser by Axiom's compiled RuleSpec engine.",
+      "FY2025 payment error rates, the OBBBA 0–15% state cost share, and the sampling error that decides nine-figure band assignments.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "SNAP payment error rate liability calculator",
+    title: "SNAP error rates now carry a price. How much is noise?",
     description:
-      "Compute SNAP payment error rate liabilities under 7 CFR 275.23(d)(2), executed in your browser by Axiom's compiled RuleSpec engine.",
+      "FY2025 payment error rates, the OBBBA 0–15% state cost share, and the sampling error that decides nine-figure band assignments.",
   },
 };
 
