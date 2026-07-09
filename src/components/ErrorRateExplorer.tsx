@@ -372,7 +372,7 @@ function Detail({ row, se, sampleK }: { row: Row; se: number; sampleK: number })
         <p className="mb-2 font-mono text-[0.66rem] uppercase tracking-[0.18em] text-[var(--color-ink-muted)]">
           Sampling distribution at {sampleK}× sample — {s.name}
         </p>
-        <DensityChart per={per} se={se} />
+        <DensityChart per={per} se={se} xMax={detailXMax(s)} />
         <p className="mt-2 text-sm leading-6 text-[var(--color-ink-secondary)]">
           Measured rate {per.toFixed(2)}% from a review of {s.qc.n.toLocaleString()}{" "}
           cases (FY2024 sample; SE ≈ {se.toFixed(2)}ppt
@@ -448,11 +448,29 @@ function Detail({ row, se, sampleK }: { row: Row; se: number; sampleK: number })
   );
 }
 
-function DensityChart({ per, se }: { per: number; se: number }) {
+/** Fixed x-range per state across the sample-size slider: sized to the widest
+ * curve it will show (0.5× sample), so dragging the slider visibly tightens
+ * the distribution against a constant axis instead of rescaling it. */
+function detailXMax(s: StateRecord): number {
+  return Math.max(
+    16,
+    s.fy2025.per + 4 * (s.sePpt * Math.SQRT2),
+    DELAY_THRESHOLD + 1.5,
+  );
+}
+
+function DensityChart({
+  per,
+  se,
+  xMax,
+}: {
+  per: number;
+  se: number;
+  xMax: number;
+}) {
   const width = 560;
   const height = 170;
   const pad = { left: 10, right: 10, top: 12, bottom: 26 };
-  const xMax = Math.max(16, per + 4 * se, DELAY_THRESHOLD + 1.5);
   const x = (v: number) =>
     pad.left + (v / xMax) * (width - pad.left - pad.right);
   const yMaxPdf = normalPdf(per, per, se);
