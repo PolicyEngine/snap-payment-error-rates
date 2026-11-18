@@ -20,7 +20,8 @@ For each state agency it shows:
 - the statutory cost-share band and the probability a re-measured rate would
   land in each band (Normal(observed, SE), truncated at zero), following the
   confidence-interval framing of Diane Whitmore Schanzenbach's analysis
-  (Bauer & Schanzenbach, Brookings, June 2026);
+  (Bauer & Schanzenbach, Brookings, 2026-08-25, Appendix B:
+  <https://www.brookings.edu/articles/the-snap-state-cost-shift-policy-leaves-the-programs-existence-to-chance/>);
 - FY2028 dollar exposure at the published rate and its noise-weighted
   expectation, scaled by FY2025 benefit issuance;
 - a sample-size counterfactual slider (SE ∝ 1/√n) showing what larger QC
