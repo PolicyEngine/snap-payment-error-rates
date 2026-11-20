@@ -19,11 +19,12 @@ For each state agency it shows:
   the FY2017–25 trajectory (FY2020–21 unpublished under COVID QC waivers);
 - the statutory cost-share band and the probability a re-measured rate would
   land in each band (Normal(observed, SE), truncated at zero, with the
-  bootstrap SE described below). For a later analysis of band probabilities
-  under a normal approximation, from FY2023 published rates and standard
-  errors, see Appendix B of Lauren Bauer and Diane Whitmore Schanzenbach,
-  "The SNAP state cost-shift policy leaves the program's existence to
-  chance" (Brookings, 2026-08-25):
+  bootstrap-based SE described below), following Diane Whitmore
+  Schanzenbach's framing. Appendix B of Lauren Bauer and Diane Whitmore
+  Schanzenbach, "The SNAP state cost-shift policy leaves the program's
+  existence to chance" (Brookings, 2026-08-25), published after this
+  calculation was written, computes band probabilities under a normal
+  approximation from FY2023 published rates and standard errors:
   <https://www.brookings.edu/articles/the-snap-state-cost-shift-policy-leaves-the-programs-existence-to-chance/>;
 - FY2028 dollar exposure at the published rate and its noise-weighted
   expectation, scaled by FY2025 benefit issuance;
