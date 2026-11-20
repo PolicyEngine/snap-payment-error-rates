@@ -18,9 +18,14 @@ For each state agency it shows:
 - the official FY2025 payment error rate with a 95% confidence interval, and
   the FY2017–25 trajectory (FY2020–21 unpublished under COVID QC waivers);
 - the statutory cost-share band and the probability a re-measured rate would
-  land in each band (Normal(observed, SE), truncated at zero), following the
-  confidence-interval framing of Diane Whitmore Schanzenbach's analysis
-  (Bauer & Schanzenbach, Brookings, June 2026);
+  land in each band (Normal(observed, SE), truncated at zero, with the
+  bootstrap-based SE described below), following Diane Whitmore
+  Schanzenbach's framing. Appendix B of Lauren Bauer and Diane Whitmore
+  Schanzenbach, "The SNAP state cost-shift policy leaves the program's
+  existence to chance" (Brookings, 2026-08-25), published after this
+  calculation was written, computes band probabilities under a normal
+  approximation from FY2023 published rates and standard errors:
+  <https://www.brookings.edu/articles/the-snap-state-cost-shift-policy-leaves-the-programs-existence-to-chance/>;
 - FY2028 dollar exposure at the published rate and its noise-weighted
   expectation, scaled by FY2025 benefit issuance;
 - a sample-size counterfactual slider (SE ∝ 1/√n) showing what larger QC
